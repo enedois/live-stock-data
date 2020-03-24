@@ -1,14 +1,13 @@
 from yahoo_fin import stock_info as si
 import pandas as pd
-import json
 import csv
-import functools
 from prettytable import PrettyTable
 
 tickers = []
 valor = []
 quantidade = []
 gainloss = 0
+maiorgain = -99999999999999
 
 with open('position.csv', newline='') as csvfile:
     data = list(csv.reader(csvfile))
@@ -32,8 +31,13 @@ while 1:
         t.add_row([tickers[x], quantidade[x], lucroinicial, lucroatual,'{:.1%}'.format((lucroatual/lucroinicial)-1)])
         #print(tickers[x])
         gainloss+= float(lucrototal)
+    if(gainloss>maiorgain):
+        maiorgain=gainloss
     print(t)
-    print(gainloss)
+    print("Saldo: "+str(gainloss))
+    print("Maior Gain: "+str(maiorgain))
+    print("Diff: "+str(maiorgain-gainloss))
+    print
     gainloss = 0
     print("\n")
 
